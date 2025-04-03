@@ -1,0 +1,14 @@
+version 1
+ai(pdf) -> submit file -> clicks a button that asks to give a question from the pdf
+
+version 2 
+copy or input question that will generate question (in json format)
+
+TODO
+-put recent quiz in the sidebar content (chat history for the chatbot)
+-when user enter directly to the url, clear the id if not found
+-invalidate the query of the history conversation when a new one is created
+
+-use enum for the status columns
+-in migration, specify what the status in the request  ex.(in:pending,completed)
+-add limits to the strings in migration (255)
