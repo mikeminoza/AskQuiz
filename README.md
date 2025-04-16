@@ -15,7 +15,7 @@
 ### Frontend:
 - **Next.js (React)**
 - **Tailwind CSS** (for styling)
-- **OpenAI/Gemini API** (for AI chatbot)
+- **OpenAI/Gemini API** (for AI chatbot and Generating MCQ from user input)
 
 ### Backend:
 - **Laravel (PHP Framework)**
