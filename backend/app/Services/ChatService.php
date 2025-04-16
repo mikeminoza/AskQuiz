@@ -18,14 +18,14 @@ class ChatService
             'title' => $data['title'],
             'user_id' => Auth::id()
         ]);
-        $this->createMessage([
+        $this->createMessage($conversation->id, [
             'role' => $data['role'],
             'text' => $data['text']
-        ], $conversation->id);
+        ]);
         return $this->jsonFormatSingleConversation($conversation);
     }
 
-    public function createMessage($conversation_id, array $data, )
+    public function createMessage($conversation_id, array $data)
     {
         $conversation = Conversation::findOrFail($conversation_id);
         $conversation->messages()->create([

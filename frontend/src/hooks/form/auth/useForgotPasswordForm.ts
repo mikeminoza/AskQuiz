@@ -1,6 +1,6 @@
 "use client";
 
-import { useAuth } from "../useAuth";
+import { useAuth } from "../../useAuth";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { ForgotPasswordField } from "@/types/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -13,12 +13,11 @@ export function useForgotPasswordForm() {
     const [isSuccess, setIsSuccess] = useState(false);
     const [forgotPasswordError, setForgotPasswordError] = useState("");
 
-    const {
-        register,
-        handleSubmit,
-        formState: { errors, isSubmitting },
-    } = useForm<ForgotPasswordField>({
+    const form = useForm<ForgotPasswordField>({
         resolver: zodResolver(ForgotPasswordSchema),
+        defaultValues: {
+            email: "",
+        },
     });
 
     const onSubmit: SubmitHandler<ForgotPasswordField> = async (email) => {
@@ -37,11 +36,8 @@ export function useForgotPasswordForm() {
     };
 
     return {
-        register,
-        handleSubmit,
+        form,
         onSubmit,
-        errors,
-        isSubmitting,
         isSuccess,
         forgotPasswordError,
     };

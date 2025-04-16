@@ -1,6 +1,6 @@
 "use client";
 
-import { useAuth } from "../useAuth";
+import { useAuth } from "../../useAuth";
 import { PasswordResetSchema } from "@/lib/zod-schemas/authSchema";
 import { PasswordResetForm } from "@/types/auth";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -19,12 +19,12 @@ export function usePasswordResetForm() {
     const token = params.token as string;
     const email = searchParams.get("email") || "";
 
-    const {
-        register,
-        handleSubmit,
-        formState: { errors, isSubmitting },
-    } = useForm<PasswordResetForm>({
+    const form = useForm<PasswordResetForm>({
         resolver: zodResolver(PasswordResetSchema),
+        defaultValues: {
+            password: "",
+            password_confirmation: "",
+        },
     });
 
     const onSubmit: SubmitHandler<PasswordResetForm> = async (data) => {
@@ -41,11 +41,8 @@ export function usePasswordResetForm() {
     };
 
     return {
-        register,
-        handleSubmit,
+        form,
         onSubmit,
-        errors,
-        isSubmitting,
         passwordResetError,
     };
 }

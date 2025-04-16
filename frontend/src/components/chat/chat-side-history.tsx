@@ -52,8 +52,8 @@ export default function ChatSideHistory() {
                 {chatHistory.map((conversation) => {
                     // Get the last message from the conversation
                     const latestMessage =
-                        conversation.message[conversation.message.length - 1]
-                            .parts[0].text;
+                        conversation.message?.[conversation.message.length - 1]
+                            ?.parts?.[0]?.text || "No message";
 
                     return (
                         <div

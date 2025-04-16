@@ -18,7 +18,6 @@ const eslintConfig = [
             "indent": ["error", 4], 
             "prefer-arrow-callback": ["error"], 
             "prefer-template": ["error"],
-            "no-console": "warn", 
         },
     }),
 ];
