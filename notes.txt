@@ -12,3 +12,8 @@ TODO
 -use enum for the status columns
 -in migration, specify what the status in the request  ex.(in:pending,completed)
 -add limits to the strings in migration (255)
+
+-restart migration
+
+
+

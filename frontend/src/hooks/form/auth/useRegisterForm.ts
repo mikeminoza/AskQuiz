@@ -1,6 +1,6 @@
 "use client";
 
-import { useAuth } from "../useAuth";
+import { useAuth } from "../../useAuth";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { RegisterFields } from "@/types/auth";
@@ -12,12 +12,14 @@ export function useRegisterForm() {
     const { registerMutation } = useAuth();
     const [registerError, setRegisterError] = useState("");
 
-    const {
-        register,
-        handleSubmit,
-        formState: { errors, isSubmitting },
-    } = useForm<RegisterFields>({
+    const form = useForm<RegisterFields>({
         resolver: zodResolver(RegisterSchema),
+        defaultValues: {
+            name: "",
+            email: "",
+            password: "",
+            password_confirmation: "",
+        },
     });
 
     const onSubmit: SubmitHandler<RegisterFields> = async (data) => {
@@ -33,11 +35,11 @@ export function useRegisterForm() {
         }
     };
 
+    const isSubmitting = form.formState.isSubmitSuccessful;
+
     return {
-        register,
-        handleSubmit,
+        form,
         onSubmit,
-        errors,
         isSubmitting,
         registerError,
     };

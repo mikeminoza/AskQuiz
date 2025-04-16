@@ -34,7 +34,6 @@ class QuizRequest extends FormRequest
             'description' => 'nullable|string',
             'category' => 'required|string',
             'is_public' => 'required|boolean',
-            'status' => 'required|string',
         ];
     }
 }

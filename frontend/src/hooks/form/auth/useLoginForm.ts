@@ -1,6 +1,6 @@
 "use client";
 
-import { useAuth } from "../useAuth";
+import { useAuth } from "../../useAuth";
 import { LoginFields } from "@/types/auth";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -12,12 +12,12 @@ export function useLoginForm() {
     const [loginError, setLoginError] = useState("");
     const { loginMutation } = useAuth();
 
-    const {
-        register,
-        handleSubmit,
-        formState: { errors, isSubmitting },
-    } = useForm<LoginFields>({
+    const form = useForm<LoginFields>({
         resolver: zodResolver(LoginSchema),
+        defaultValues: {
+            email: "",
+            password: "",
+        },
     });
 
     const onSubmit: SubmitHandler<LoginFields> = async (data) => {
@@ -32,12 +32,8 @@ export function useLoginForm() {
             console.log(error);
         }
     };
-
     return {
-        register,
-        handleSubmit,
-        errors,
-        isSubmitting,
+        form,
         onSubmit,
         loginError,
     };

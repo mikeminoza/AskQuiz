@@ -13,7 +13,7 @@ class QuizService
             'description' => $data['description'],
             'category' => $data['category'],
             'is_public' => $data['is_public'],
-            'status' => $data['status']
+            'status' => "draft"
         ]);
 
         return ['quiz' => $quiz, 'message' => 'Quiz created successfully!'];
