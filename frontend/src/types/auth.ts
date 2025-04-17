@@ -21,7 +21,7 @@ export type PasswordResetData = {
     password_confirmation: string;
 };
 
-export type SocialAuth = "google" | "facebook";
+export type SocialAuth = "google" | "linkedin";
 
 // for the reset password form
 export type PasswordResetForm = Omit<PasswordResetData, "token" | "email">;
