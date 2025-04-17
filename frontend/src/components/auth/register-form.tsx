@@ -124,10 +124,10 @@ export function RegisterForm({
                 <div className="text-center text-sm">
                     Already have an account?{" "}
                     <Link
-                        href="/register"
+                        href="/login"
                         className="underline underline-offset-4"
                     >
-                        Sign up
+                        Sign In
                     </Link>
                 </div>
             </div>

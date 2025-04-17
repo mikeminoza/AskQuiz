@@ -7,6 +7,10 @@ import { CreateDialog } from "@/components/quiz/create-dialog";
 import { Sort } from "@/components/quiz/sort";
 import { Filter } from "@/components/quiz/filter";
 import { QuizCard } from "@/components/quiz/quiz-card";
+import { useQuery } from "@tanstack/react-query";
+import { getUserQuiz } from "@/services/quiz";
+import { QuizSkeleton } from "@/components/quiz/quiz-skeleton";
+import { Quiz } from "@/types/quiz";
 
 export default function MyQuizzesPage() {
     const breadcrumbs = [
@@ -16,6 +20,12 @@ export default function MyQuizzesPage() {
         },
     ];
     const [sortBy, setSortBy] = useState("newest"); // add types for the sort
+
+    const { data, isLoading } = useQuery<{ quizzes: Quiz[] }>({
+        queryKey: ["userQuizzes"],
+        queryFn: getUserQuiz,
+    });
+
     return (
         <HomeLayout breadcrumbs={breadcrumbs}>
             <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between mt-5 mb-2 gap-2">
@@ -38,7 +48,11 @@ export default function MyQuizzesPage() {
             </div>
 
             <div className="flex flex-col gap-4 mt-2">
-                <QuizCard />
+                {isLoading ? (
+                    <QuizSkeleton />
+                ) : (
+                    <QuizCard quizzes={data?.quizzes} />
+                )}
             </div>
         </HomeLayout>
     );
