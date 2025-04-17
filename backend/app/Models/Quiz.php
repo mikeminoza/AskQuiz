@@ -2,10 +2,12 @@
 
 namespace App\Models;
 
+use App\ReadableTimestamps;
 use Illuminate\Database\Eloquent\Model;
 
 class Quiz extends Model
 {
+    use ReadableTimestamps;
     protected $fillable = [
         'title',
         'description',

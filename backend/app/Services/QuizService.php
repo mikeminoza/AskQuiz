@@ -6,6 +6,12 @@ use Illuminate\Support\Facades\Auth;
 
 class QuizService
 {
+    public function getUserQuizzes($user)
+    {
+        $quizzes = $user->quizzes()->with('questions')->get();
+        return ['quizzes' => $quizzes];
+    }
+
     public function createQuiz($user, array $data)
     {
         $quiz = $user->quizzes()->create([
