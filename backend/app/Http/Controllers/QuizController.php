@@ -14,6 +14,12 @@ class QuizController extends Controller
 
     }
 
+    public function index(Request $request)
+    {
+        $data = $this->quizService->getUserQuizzes($request->user());
+        return response()->json($data, 200);
+    }
+
     public function store(QuizRequest $request)
     {
         $data = $this->quizService->createQuiz($request->user(), $request->validated());
