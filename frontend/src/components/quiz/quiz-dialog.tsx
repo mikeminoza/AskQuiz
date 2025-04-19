@@ -25,12 +25,12 @@ import {
 } from "@/components/ui/popover";
 import { Checkbox } from "@/components/ui/checkbox";
 import { cn } from "@/lib/utils";
-import { PlusCircle, Check, ChevronsUpDown, Loader2 } from "lucide-react";
+import { Check, ChevronsUpDown, Loader2 } from "lucide-react";
 import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { useEffect, useState } from "react";
 import { quizCategories } from "@/data/quizCategory";
-import { useCreateQuizForm } from "@/hooks/form/quiz/useCreateQuizForm";
+import { useQuizForm } from "@/hooks/form/quiz/useQuizForm";
 import {
     Form,
     FormControl,
@@ -39,41 +39,40 @@ import {
     FormLabel,
     FormMessage,
 } from "@/components/ui/form";
+import { QuizDialogProps } from "@/types/quiz";
 
-export function CreateDialog() {
-    const [openDialog, setOpenDialog] = useState(false);
+export function QuizDialog({
+    quiz,
+    openQuizDialog,
+    setOpenQuizDialog,
+}: QuizDialogProps) {
     const [open, setOpen] = useState(false);
-    const { form, onSubmit, isSuccess, resetForm } = useCreateQuizForm();
+    const { form, onSubmit, isSuccess, resetForm } = useQuizForm(quiz);
 
     useEffect(() => {
         if (isSuccess) {
-            setOpenDialog(false);
+            setOpenQuizDialog(false);
             resetForm();
         }
-    }, [isSuccess, resetForm]);
+    }, [isSuccess, resetForm, setOpenQuizDialog]);
 
     return (
         <>
-            <Button
-                onClick={() => {
-                    setOpenDialog(true);
-                    resetForm();
-                }}
-            >
-                <PlusCircle />
-                Create Quiz
-            </Button>
-
-            <Dialog open={openDialog} onOpenChange={setOpenDialog}>
+            <Dialog open={openQuizDialog} onOpenChange={setOpenQuizDialog}>
                 <DialogContent className="w-lg">
                     <Form {...form}>
                         <form onSubmit={form.handleSubmit(onSubmit)}>
                             <DialogHeader>
-                                <DialogTitle>New Quiz</DialogTitle>
+                                <DialogTitle>
+                                    {quiz ? "Edit Quiz" : "New Quiz"}
+                                </DialogTitle>
                                 <DialogDescription>
-                                    Enter Quiz Details Below
+                                    {quiz
+                                        ? "Update quiz details below"
+                                        : "Enter quiz details below"}
                                 </DialogDescription>
                             </DialogHeader>
+
                             <div className="grid w-full items-center gap-4 my-6">
                                 <FormField
                                     name="title"
@@ -114,7 +113,7 @@ export function CreateDialog() {
                                         const selectedCategory =
                                             quizCategories.find(
                                                 (cat) =>
-                                                    cat.value === field.value
+                                                    cat.label === field.value
                                             );
                                         return (
                                             <FormItem>
@@ -161,7 +160,7 @@ export function CreateDialog() {
                                                                                     }
                                                                                     onSelect={() => {
                                                                                         field.onChange(
-                                                                                            category.value
+                                                                                            category.label
                                                                                         );
                                                                                         setOpen(
                                                                                             false
@@ -175,7 +174,7 @@ export function CreateDialog() {
                                                                                         className={cn(
                                                                                             "ml-auto h-4 w-4",
                                                                                             field.value ===
-                                                                                                category.value
+                                                                                                category.label
                                                                                                 ? "opacity-100"
                                                                                                 : "opacity-0"
                                                                                         )}
@@ -203,7 +202,9 @@ export function CreateDialog() {
                                             <FormControl>
                                                 <Checkbox
                                                     id="is_public"
-                                                    checked={field.value}
+                                                    checked={Boolean(
+                                                        field.value
+                                                    )}
                                                     onCheckedChange={
                                                         field.onChange
                                                     }
@@ -232,8 +233,10 @@ export function CreateDialog() {
                                                 size={20}
                                                 className="animate-spin"
                                             />
-                                            Creating
+                                            {quiz ? "Updating" : "Creating"}
                                         </span>
+                                    ) : quiz ? (
+                                        "Update"
                                     ) : (
                                         "Create"
                                     )}

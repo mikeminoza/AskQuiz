@@ -1,4 +1,3 @@
-"use client";
 import {
     AlertDialog,
     AlertDialogCancel,
@@ -8,33 +7,29 @@ import {
     AlertDialogHeader,
     AlertDialogTitle,
 } from "@/components/ui/alert-dialog";
-import { DropdownMenuItem } from "@/components/ui/dropdown-menu";
-import { Quiz } from "@/types/quiz";
-import { Loader2, Trash2 } from "lucide-react";
-import { useEffect, useState } from "react";
+import { DeleteDialogProps } from "@/types/quiz";
+import { Loader2 } from "lucide-react";
+import { useEffect } from "react";
 import { useQuiz } from "@/hooks/useQuiz";
 import { Button } from "../ui/button";
 
-export function DeleteDialog({ quiz }: { quiz: Quiz }) {
-    const [openDialog, setOpenDialog] = useState(false);
+export function DeleteDialog({
+    quiz,
+    openDeleteDialog,
+    setOpenDeleteDialog,
+}: DeleteDialogProps) {
     const { deleteMutation } = useQuiz();
 
     useEffect(() => {
-        if (deleteMutation.isSuccess) setOpenDialog(false);
-    }, [deleteMutation.isSuccess]);
+        if (deleteMutation.isSuccess) setOpenDeleteDialog(false);
+    }, [deleteMutation.isSuccess, setOpenDeleteDialog]);
 
     return (
         <>
-            <DropdownMenuItem
-                onSelect={(e) => {
-                    e.preventDefault();
-                    setOpenDialog(true);
-                }}
+            <AlertDialog
+                open={openDeleteDialog}
+                onOpenChange={setOpenDeleteDialog}
             >
-                <Trash2 /> Delete
-            </DropdownMenuItem>
-
-            <AlertDialog open={openDialog} onOpenChange={setOpenDialog}>
                 <AlertDialogContent className="w-sm">
                     <AlertDialogHeader>
                         <AlertDialogTitle>

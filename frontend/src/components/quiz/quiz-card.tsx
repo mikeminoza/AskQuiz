@@ -1,5 +1,11 @@
 import { Button } from "@/components/ui/button";
-import { CalendarIcon, Edit, MoreVertical, NotepadText } from "lucide-react";
+import {
+    CalendarIcon,
+    Edit,
+    MoreVertical,
+    NotepadText,
+    Trash2,
+} from "lucide-react";
 import {
     Card,
     CardDescription,
@@ -14,14 +20,20 @@ import {
     DropdownMenuItem,
     DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { QuizCardProps } from "@/types/quiz";
+import { Quiz, QuizCardProps } from "@/types/quiz";
 import { DeleteDialog } from "./delete-dialog";
+import { useState } from "react";
+import { QuizDialog } from "./quiz-dialog";
 
 export function QuizCard({ quizzes }: QuizCardProps) {
+    const [editQuiz, setEditQuiz] = useState<Quiz | null>(null);
+    const [openQuizDialog, setOpenQuizDialog] = useState<boolean>(false);
+    const [openDeleteDialog, setOpenDeleteDialog] = useState<boolean>(false);
+
     return (
         <div className="flex flex-col gap-4">
             {quizzes?.length === 0 ? (
-                <div className="flex mt-44 justify-center items-center text-gray-400 gap-3">
+                <div className="flex mt-40 justify-center items-center text-gray-400 gap-3">
                     <NotepadText size={50} />{" "}
                     <h1 className="scroll-m-20 text-3xl font-bold tracking-tight">
                         No Quiz found
@@ -60,12 +72,23 @@ export function QuizCard({ quizzes }: QuizCardProps) {
                                             </Button>
                                         </DropdownMenuTrigger>
                                         <DropdownMenuContent align="end">
-                                            <DropdownMenuItem>
-                                                <Edit className="mr-2 h-4 w-4" />
+                                            <DropdownMenuItem
+                                                onClick={() => {
+                                                    setEditQuiz(quiz);
+                                                    setOpenQuizDialog(true);
+                                                }}
+                                            >
+                                                <Edit />
                                                 <span>Edit</span>
                                             </DropdownMenuItem>
-                                            {/* Delete Dialog  */}
-                                            <DeleteDialog quiz={quiz} />
+                                            <DropdownMenuItem
+                                                onClick={(e) => {
+                                                    e.preventDefault();
+                                                    setOpenDeleteDialog(true);
+                                                }}
+                                            >
+                                                <Trash2 /> Delete
+                                            </DropdownMenuItem>
                                         </DropdownMenuContent>
                                     </DropdownMenu>
                                 </div>
@@ -88,6 +111,19 @@ export function QuizCard({ quizzes }: QuizCardProps) {
                             <Button variant="outline">Preview</Button>
                             <Button>Start Quiz</Button>
                         </CardFooter>
+
+                        {/* Edit Dialog  */}
+                        <QuizDialog
+                            quiz={editQuiz}
+                            openQuizDialog={openQuizDialog}
+                            setOpenQuizDialog={setOpenQuizDialog}
+                        />
+                        {/* Delete Dialog  */}
+                        <DeleteDialog
+                            quiz={quiz}
+                            openDeleteDialog={openDeleteDialog}
+                            setOpenDeleteDialog={setOpenDeleteDialog}
+                        />
                     </Card>
                 ))
             )}
