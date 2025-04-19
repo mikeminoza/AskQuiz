@@ -3,7 +3,7 @@
 import HomeLayout from "@/components/layout/layout";
 import { Input } from "@/components/ui/input";
 import { useState } from "react";
-import { CreateDialog } from "@/components/quiz/create-dialog";
+import { QuizDialog } from "@/components/quiz/quiz-dialog";
 import { Sort } from "@/components/quiz/sort";
 import { Filter } from "@/components/quiz/filter";
 import { QuizCard } from "@/components/quiz/quiz-card";
@@ -11,6 +11,8 @@ import { useQuery } from "@tanstack/react-query";
 import { getUserQuiz } from "@/services/quiz";
 import { QuizSkeleton } from "@/components/quiz/quiz-skeleton";
 import { Quiz } from "@/types/quiz";
+import { PlusCircle } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 export default function MyQuizzesPage() {
     const breadcrumbs = [
@@ -19,6 +21,7 @@ export default function MyQuizzesPage() {
             href: "/my-quizzes",
         },
     ];
+    const [openQuizDialog, setOpenQuizDialog] = useState<boolean>(false);
     const [sortBy, setSortBy] = useState("newest"); // add types for the sort
 
     const { data, isLoading } = useQuery<{ quizzes: Quiz[] }>({
@@ -38,7 +41,15 @@ export default function MyQuizzesPage() {
                         you need them.
                     </p>
                 </div>
-                <CreateDialog />
+
+                <Button
+                    onClick={() => {
+                        setOpenQuizDialog(true);
+                    }}
+                >
+                    <PlusCircle />
+                    Create Quiz
+                </Button>
             </div>
 
             <div className="flex gap-3">
@@ -54,6 +65,13 @@ export default function MyQuizzesPage() {
                     <QuizCard quizzes={data?.quizzes} />
                 )}
             </div>
+
+            {/* Create dialog  */}
+            <QuizDialog
+                quiz={null}
+                openQuizDialog={openQuizDialog}
+                setOpenQuizDialog={setOpenQuizDialog}
+            />
         </HomeLayout>
     );
 }

@@ -2,16 +2,14 @@
 
 import { useQuiz } from "@/hooks/useQuiz";
 import { QuizSchema } from "@/lib/zod-schemas/quizSchema";
-import { QuizFields } from "@/types/quiz";
+import { Quiz, QuizFields } from "@/types/quiz";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { AxiosError } from "axios";
-import { useState } from "react";
+import { useEffect } from "react";
 import { SubmitHandler, useForm } from "react-hook-form";
 import { QuizInputField } from "@/types/quiz";
 
-export function useCreateQuizForm() {
-    const [createError, setCreateError] = useState("");
-    const { createMutation } = useQuiz();
+export function useQuizForm(quiz: Quiz | null) {
+    const { createMutation, updateMutation } = useQuiz();
 
     const form = useForm<QuizFields>({
         resolver: zodResolver(QuizSchema),
@@ -23,17 +21,28 @@ export function useCreateQuizForm() {
         },
     });
 
+    // set default values when editing
+    useEffect(() => {
+        if (quiz) {
+            form.reset({
+                title: quiz.title,
+                description: quiz.description,
+                category: quiz.category,
+                is_public: quiz.is_public,
+            });
+        }
+    }, [quiz, form]);
+
     const onSubmit: SubmitHandler<QuizFields> = async (
         data: QuizInputField
     ) => {
         try {
-            await createMutation.mutateAsync(data);
-            setCreateError("");
+            if (quiz) {
+                await updateMutation.mutateAsync({ id: quiz.id, ...data });
+            } else {
+                await createMutation.mutateAsync(data);
+            }
         } catch (error) {
-            const errorMsg = error as AxiosError;
-            setCreateError(
-                errorMsg.response?.data?.message || "Something went wrong!"
-            );
             console.log(error);
         }
     };
@@ -44,7 +53,6 @@ export function useCreateQuizForm() {
         form,
         onSubmit,
         resetForm,
-        isSuccess: createMutation.isSuccess,
-        createError,
+        isSuccess: createMutation.isSuccess || updateMutation.isSuccess,
     };
 }

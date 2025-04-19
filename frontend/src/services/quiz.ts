@@ -1,5 +1,5 @@
 import api from "@/app/api/axios";
-import { QuizInputField, Quiz } from "@/types/quiz";
+import { QuizInputField } from "@/types/quiz";
 
 export const getUserQuiz = async () => {
     const response = await api.get("/api/quizzes");
@@ -11,7 +11,7 @@ export const createQuiz = async (data: QuizInputField) => {
     return response.data;
 };
 
-export const updateQuiz = async (data: Quiz) => {
+export const updateQuiz = async (data: QuizInputField) => {
     const response = await api.put(`/api/quizzes/${data.id}`, data);
     return response.data;
 };
